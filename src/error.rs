@@ -5,5 +5,7 @@ pub enum Error {
     #[error("Incorrect usage")]
     CliUsage,
     #[error("Reqwest: {0}")]
-    Reqest(#[from] reqwest::Error),
+    Reqwest(#[from] reqwest::Error),
+    #[error("Invalid spider name provided {0}")]
+    InvalidSpiderName(String),
 }

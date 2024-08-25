@@ -9,7 +9,7 @@ use select::{
     predicate::{Attr, Class, Element, Name, Predicate, Text},
 };
 
-use super::Spider;
+use super::{GetName, Spider};
 const CVE_DETAILS_COM: &'static str = "http://www.cvedetails.com";
 
 #[derive(Debug, Clone)]
@@ -62,16 +62,18 @@ fn normalise_link(segment: &str) -> String {
     format!("{CVE_DETAILS_COM}/{segment}")
 }
 
+impl GetName for CveDetailsSpider {
+    fn get_name() -> String {
+        "cvedetails".to_owned()
+    }
+}
+
 #[async_trait]
 impl Spider for CveDetailsSpider {
     type Item = Cve;
 
-    fn name(&self) -> String {
-        "CveDetails".to_owned()
-    }
-
     fn start_urls(&self) -> Vec<String> {
-        todo!()
+        vec!["https://www.cvedetails.com/vulnerability-list/vulnerabilities.html".to_string()]
     }
 
     async fn scrape(&self, url: String) -> Result<(Vec<Self::Item>, Vec<String>), Error> {
@@ -138,6 +140,8 @@ impl Spider for CveDetailsSpider {
     }
 
     async fn process(&self, item: Self::Item) -> Result<(), Error> {
-        todo!()
+        // Onee day maybe these go in a database, get real formatting, etc.
+        println!("{item:?}");
+        Ok(())
     }
 }

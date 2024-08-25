@@ -103,7 +103,7 @@ impl Crawler {
         tokio::spawn(async move {
             tokio_stream::wrappers::ReceiverStream::new(items_rx)
                 .for_each_concurrent(concurrency, |item| async {
-                    spider.process(item).await;
+                    spider.process(item).await.ok();
                 })
                 .await;
             barrier.wait().await;
